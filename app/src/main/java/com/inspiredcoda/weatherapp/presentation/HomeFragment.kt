@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.inspiredcoda.weatherapp.R
-import com.inspiredcoda.weatherapp.data.response.coord.WeatherCoordResponse
+import com.inspiredcoda.weatherapp.data.entity.CoordEntity
 import com.inspiredcoda.weatherapp.databinding.FragmentHomeBinding
 import com.inspiredcoda.weatherapp.presentation.DetailsFragment.Companion.LOCATION_QUERY
 import com.inspiredcoda.weatherapp.presentation.adapter.LocationAdapter
@@ -79,10 +79,10 @@ class HomeFragment : Fragment() {
         mainViewModel.weatherReportByCoord.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is ResponseState.Success<*> -> {
-                    val report = (response.data as WeatherCoordResponse).list?.get(0)
-                    binding.temperature.text = report?.main?.temp.toString()
-                    binding.location.text = report?.name
-                    getWeatherIcon(report?.weather?.get(0)?.icon ?: "")
+                    val report = (response.data as CoordEntity)
+                    binding.temperature.text = report.temp
+                    binding.location.text = report.name
+                    getWeatherIcon(report.weatherIconUrl)
                 }
                 is ResponseState.Failure -> {
                     toast(response.errorMessage)
@@ -93,7 +93,10 @@ class HomeFragment : Fragment() {
 
     private fun getCurrentWeatherReport() {
         getCurrentLocation {
-            mainViewModel.getWeatherReportByCoord(longitude = it?.get(LONGITUDE)!!, latitude = it?.get(LATITUDE)!!)
+            mainViewModel.getWeatherReportByCoord(
+                longitude = it?.get(LONGITUDE)!!,
+                latitude = it?.get(LATITUDE)!!
+            )
         }
     }
 
