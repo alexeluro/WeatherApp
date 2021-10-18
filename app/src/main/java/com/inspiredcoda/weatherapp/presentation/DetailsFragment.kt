@@ -10,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.inspiredcoda.weatherapp.data.response.location.WeatherResponse
+import com.inspiredcoda.weatherapp.data.entity.WeatherDetailEntity
 import com.inspiredcoda.weatherapp.databinding.FragmentDetailsBinding
 import com.inspiredcoda.weatherapp.presentation.viewmodel.MainViewModel
 import com.inspiredcoda.weatherapp.utils.ResponseState
@@ -69,17 +69,14 @@ class DetailsFragment : Fragment() {
         mainViewModel.weatherReportByLocation.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is ResponseState.Success<*> -> {
-                    val report = (response.data as WeatherResponse)
-                    val pressure = "${report?.main?.pressure} hPa"
-                    val humidity = "${report?.main?.humidity} %"
-                    val windSpeed = "${report?.wind?.speed} m/s"
+                    val report = (response.data as WeatherDetailEntity)
 
-                    binding.temp.text = report?.main?.temp.toString()
-                    binding.location.text = report?.name
-                    binding.pressure.text = pressure
-                    binding.humidity.text = humidity
-                    binding.wind.text = windSpeed
-                    getWeatherIcon(report?.weather?.get(0)?.icon ?: "")
+                    binding.temp.text = report.temp
+                    binding.location.text = report.name
+                    binding.pressure.text = report.pressure
+                    binding.humidity.text = report.humidity
+                    binding.wind.text = report.windSpeed
+                    getWeatherIcon(report.weatherIconUrl)
                 }
                 is ResponseState.Failure -> {
                     navController.popBackStack()

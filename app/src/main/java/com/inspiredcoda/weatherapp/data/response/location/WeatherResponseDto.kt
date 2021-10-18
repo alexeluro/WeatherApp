@@ -2,8 +2,9 @@ package com.inspiredcoda.weatherapp.data.response.location
 
 
 import com.google.gson.annotations.SerializedName
+import com.inspiredcoda.weatherapp.data.entity.WeatherDetailEntity
 
-data class WeatherResponse(
+data class WeatherResponseDto(
     @SerializedName("base")
     var base: String?,
     @SerializedName("clouds")
@@ -30,4 +31,14 @@ data class WeatherResponse(
     var weather: List<Weather>?,
     @SerializedName("wind")
     var wind: Wind?
-)
+) {
+    fun toWeatherDetailEntity() = WeatherDetailEntity(
+        name = name ?: "",
+        temp = "${main?.temp ?: 0}",
+        pressure = "${main?.pressure ?: 0} hPa",
+        humidity = "${main?.humidity ?: 0} %",
+        windSpeed = "${wind?.speed ?: 0} m/s",
+        weatherIconUrl = weather?.get(0)?.icon ?: ""
+    )
+
+}

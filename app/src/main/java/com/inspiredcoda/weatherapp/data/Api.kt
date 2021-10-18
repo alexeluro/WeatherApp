@@ -1,8 +1,8 @@
 package com.inspiredcoda.weatherapp.data
 
 import com.inspiredcoda.weatherapp.BuildConfig
-import com.inspiredcoda.weatherapp.data.response.coord.WeatherCoordResponse
-import com.inspiredcoda.weatherapp.data.response.location.WeatherResponse
+import com.inspiredcoda.weatherapp.data.response.coord.WeatherCoordResponseDto
+import com.inspiredcoda.weatherapp.data.response.location.WeatherResponseDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -14,7 +14,7 @@ interface Api {
         @Query("q") location: String,
         @Query("units") unit: String = "metric",
         @Query("appid") apiKey: String = BuildConfig.API_KEY
-    ): Response<WeatherResponse>
+    ): Response<WeatherResponseDto>
 
 
     @GET("data/2.5/find")
@@ -24,7 +24,7 @@ interface Api {
         @Query("cnt") cityCount: Int = 1,
         @Query("units") unit: String = "metric",
         @Query("appid") apiKey: String = BuildConfig.API_KEY
-    ): Response<WeatherCoordResponse>
+    ): Response<WeatherCoordResponseDto>
 
 
     companion object {

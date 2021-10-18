@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.inspiredcoda.weatherapp.data.WeatherRepository
-import com.inspiredcoda.weatherapp.data.response.coord.WeatherCoordResponse
-import com.inspiredcoda.weatherapp.data.response.location.WeatherResponse
+import com.inspiredcoda.weatherapp.data.entity.CoordEntity
+import com.inspiredcoda.weatherapp.data.entity.WeatherDetailEntity
 import com.inspiredcoda.weatherapp.utils.ResponseState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -35,7 +35,7 @@ class MainViewModel @Inject constructor(
             when (val response = repository.getWeatherReport(longitude, latitude)) {
                 is ResponseState.Success<*> -> {
                     _loadingState.postValue(false)
-                    _weatherReportByCoord.postValue(ResponseState.Success(response.data as WeatherCoordResponse))
+                    _weatherReportByCoord.postValue(ResponseState.Success(response.data as CoordEntity))
                 }
                 is ResponseState.Failure -> {
                     _loadingState.postValue(false)
@@ -51,7 +51,7 @@ class MainViewModel @Inject constructor(
             when (val response = repository.getWeatherReport(location)) {
                 is ResponseState.Success<*> -> {
                     _loadingState.postValue(false)
-                    _weatherReportByLocation.postValue(ResponseState.Success(response.data as WeatherResponse))
+                    _weatherReportByLocation.postValue(ResponseState.Success(response.data as WeatherDetailEntity))
                 }
                 is ResponseState.Failure -> {
                     _loadingState.postValue(false)
